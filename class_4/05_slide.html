@@ -12,7 +12,12 @@
 		</style>
 		<script>
       $(function(){
-        
+        //사라지는 효과
+        // $(".wrap .box").slideUp();
+        //나타내는 효과
+        // $(".wrap .box").slideDown(3000);
+        //있으면 사라지고 없으면 나타내는 효과
+        $(".wrap .box").slideToggle(1000);
       });
 
       
