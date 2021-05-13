@@ -14,15 +14,21 @@
 	<script>
 		$(function () {
 			$(".fp").fullpage({
-				navigation:true,
-				// navigationPosition:"left",
-				sectionsColor:["#999", "#4bbfc3", "#7baabe", "#666"],
-				navigationTooltips:["main", "intro", "map", "contact"],
-				showActiveTooltip:true
+				navigation:true, //네비게이션 유무
+				// navigationPosition:"left",  //네비게이션 위치
+				sectionsColor:["#999", "#4bbfc3", "#7baabe", "#666"], //각 섹션 별 배경색
+				navigationTooltips:["main", "intro", "map", "contact"], // 네비게이션 메뉴명
+				showActiveTooltip:true //네비게이션 메뉴명 활성화
 			});
 		})
 	</script>
 	<style>
+		.fp .fp-tableCell {
+			font-size: 100px;
+			text-align: center;
+			font-weight: bold;
+			color: #fff;
+		}
 
 	</style>
 
