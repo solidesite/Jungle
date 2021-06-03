@@ -9,7 +9,7 @@ function init() {
         navigation: true, //메뉴 유무
         navigationTooltips: ["MAIN", "PROFILE", "SKILL", "PORTFOLIO", "CONTACT"], //메뉴명
         scrollingSpeed: 1500, //메뉴이동 스크롤 스피드
-        anchor: ["main", "profile", "skill", "portfolio", "contact"],
+        anchors: ["main", "profile", "skill", "portfolio", "contact"],
     });
 
     ////메인
@@ -67,4 +67,43 @@ function init() {
         // console.log(_per1);
         $("#section2 .wave-wrap .unit .num > strong").text(_per1); //strong태그에 업데이트
     }
+
+    ////portfolio
+    $("#section3 .photo-wrap > ul").slick({ //slick jquery 플러그인
+        arrows:false, //좌우버튼 비활성화
+        slidesToShow:3, //한 화면에 보여지는 이미지 갯수
+        variableWidth:true, //이미지 크기만큼 보여줌 (겹침현상 x)
+        centerMode:true //기본 왼쪽 정렬이지만 가운데 정렬로 변경
+    }).on("afterChange", function(event, slick, current){ //슬라이드가 한 번 이동시 발생되는 이벤트 (current인자 : 순번(index)값)
+        // console.log(current);
+        $("#section3 .txt-wrap > ul > li").removeClass("on"); //li전체의 on클래스를 삭제
+        $("#section3 .txt-wrap > ul > li").eq(current).addClass("on"); //해당 index의 li에 on클래스를 추가
+    });
+
+    //portfolio cursor 효과
+    document.addEventListener("mousemove", function(event){
+        var mx = event.pageX - 15; //마우스 x좌표값
+        var my = event.pageY - 15; //마우스 y좌표값
+        // console.log(mx,my);
+        $("#section3 .photo-wrap .cursor").css({"top":my,"left":mx});
+    });
+
+    ////contact
+    $("#section4 .input-wrap input[type=text]").on("textInput", function(event){ //input의 키프레스 이벤트
+        var _t = event.originalEvent.data; //키프레스시 타이핑한 값(한글 포함)
+        //RGB(색상코드)에 쓰일 랜덤값(3개) 구함
+        var _r = Math.floor(Math.random()*256); //Math.random : 랜덤값 구하기 / Math.floor : 소수점 제거
+        var _g = Math.floor(Math.random()*256);
+        var _b = Math.floor(Math.random()*256);
+        //애니메이션 패스 타입을 랜덤으로 정할 값 구함 (0~2)
+        var _rn = Math.floor(Math.random()*3);
+
+        // $("#section4 .txt-wrap .area").append("<span class = 'ani-"+_rn+"' style='color:rgb("+_r+", "+_g+", "+_b+")'>"+_t+"</span>");
+        $("<span class = 'ani-"+_rn+"' style='color:rgb("+_r+", "+_g+", "+_b+")'>"+_t+"</span>")
+        .appendTo($("#section4 .txt-wrap .area"))
+        .on("animationend", function(){
+            console.log("aniend");
+            $(this).remove();
+        });
+    });
 }
