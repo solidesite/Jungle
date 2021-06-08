@@ -1,5 +1,17 @@
 $(function () {
-    init(); //초기함수 호출(임시)
+    //init(); //초기함수 호출(임시)
+    var _tc = $(".hidden-wrap > img").length; //이미지 총 갯수
+    // console.log(_tc);
+    $(".hidden-wrap > img").imagesLoaded().done(function(){ // 모든 이미지 로드가 완료되는 시점에 발생하는 이벤트
+        $(".preload-wrap").addClass("complete");
+    })
+    .progress(function(index){ //이미지 각각의 로드가 완료되는 시점에 한번씩 발생하는 이벤트
+        var _pc = index.progressedCount;
+        var _per = Math.floor(_pc / _tc * 100);
+        console.log(_per);
+        $(".preload-wrap .count").text(_per);
+        $(".preload-wrap .count").css("width", _per + "%");
+    });
 });
 
 function init() {
@@ -10,7 +22,19 @@ function init() {
         navigationTooltips: ["MAIN", "PROFILE", "SKILL", "PORTFOLIO", "CONTACT"], //메뉴명
         scrollingSpeed: 1500, //메뉴이동 스크롤 스피드
         anchors: ["main", "profile", "skill", "portfolio", "contact"],
-    });
+        afterLoad:function(name, index){ //해당화면에 도착시 발생하는 이벤트 (index(순서)값을 알 수 있음)
+            // $(".section").removeClass("on"); //페이지 롤링 할때마다 나오게하는 설정
+            $(".section").eq(index-1).addClass("on");
+        },
+        onLeave:function(old, index, direction){ //해당 화면을 떠날 때 발생하는 이벤트 (index = 도착하는 화면의 순서)
+            // console.log(old, index, direction);
+            if(index == 1){
+                $("#section0 .ico").css("transform", "translateY(0)");
+            }else{
+                $("#section0 .ico").css("transform", "translateY(-330px)");
+            }
+        }
+    })
 
     ////메인
     //배경처리(패럴럭스 플러그인)
@@ -82,8 +106,10 @@ function init() {
 
     //portfolio cursor 효과
     document.addEventListener("mousemove", function(event){
+        var pw = $(".photo-wrap").position().top; //커서의 부모인 photo-wrap의 상단 공간값 구함 (공간값이 커서와 마우스 포인터의 차이를 없앰)
         var mx = event.pageX - 15; //마우스 x좌표값
-        var my = event.pageY - 15; //마우스 y좌표값
+        var my = event.pageY - 15 - pw; //마우스 y좌표값
+        // console.log($(".photo-wrap").position().top)
         // console.log(mx,my);
         $("#section3 .photo-wrap .cursor").css({"top":my,"left":mx});
     });
@@ -98,12 +124,13 @@ function init() {
         //애니메이션 패스 타입을 랜덤으로 정할 값 구함 (0~2)
         var _rn = Math.floor(Math.random()*3);
 
+        // append : 추가될 대상.append(추가객체)
+        // appendTo : 추가객체.appendTo(추가될 대상).추가이벤트1.추가이벤트2...
         // $("#section4 .txt-wrap .area").append("<span class = 'ani-"+_rn+"' style='color:rgb("+_r+", "+_g+", "+_b+")'>"+_t+"</span>");
         $("<span class = 'ani-"+_rn+"' style='color:rgb("+_r+", "+_g+", "+_b+")'>"+_t+"</span>")
         .appendTo($("#section4 .txt-wrap .area"))
-        .on("animationend", function(){
-            console.log("aniend");
-            $(this).remove();
+        .on("animationend", function(){ //css에서 만든 애니메이션이 끝나는 시점에 이벤트 발생
+            $(this).remove(); //자신을 삭제
         });
     });
 }
